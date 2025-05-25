@@ -24,5 +24,67 @@
      ->nslookup -type=ns example.com
      ->nslookup -type=mx example.com
      ->nslookup -type=txt example.com
------------------------------------------------------------
+---------------------------------------------------------------
+9.Identify open ports on a target using NMAP.
+   ->nmap <target ip>          (Basic Nmap Scan)
+   ->nmap -p- <target ip>      (Scan All 65,535 TCP Ports)
+   ->nmap -sV <target ip>      (Service and Version Detection)
+   ->nmap -A <target ip>       (Aggressive Scan (Includes OS Detection))
+--------------------------------------------------------------
+10.Use traceroute to map the network path to the target.
+    ->traceroute <target ip>
+--------------------------------------------------------------
+23.Perform a vulnerability scan on the Metasploitable VM
+    ->nmap -sV --script vuln <Metasploitable_IP>
+--------------------------------------------------------------
+28. Capture live network traffic on your Kali VM interface.
+    ->sudo tcpdump -i eth0
+    ->sudo tcpdump -i eth0 -w capture.pcap
+-----------------------------------------------------------------------
+32. Extract files from captured network traffic.
+    ->sudo tcpdump -i eth0 -w capture.pcap
+    ->tshark -r capture.pcap --export-objects http,/user/tamil/Download/
+-----------------------------------------------------------------------
+29. Filter Wireshark captures to show HTTP traffic only
+    ->sudo tcpdump -i eth0 -w capture.pcap
+    ->tshark -r capture.pcap -Y "http"
+    ->sudo tcpdump -i eth0 tcp port 80
+-----------------------------------------------------------------------
+30.Identify suspicious packets based on unusual ports or flags.
+    ->sudo tcpdump -i eth0 -w capture.pcap
+    ->tshark -r capture.pcap -Y "tcp.port > 1024 || tcp.flags == 0x00 || (tcp.flags.syn == 1 && tcp.flags.fin == 1)"
+------------------------------------------------------------------------------------------------------------------------
+31. Analyze a captured TCP handshake.
+    ->sudo tcpdump -i eth0 -w capture.pcap
+    ->tshark -r capture.pcap -Y "tcp.flags.syn == 1 || tcp.flags.ack == 1" -V
+--------------------------------------------------------------------------------------------------------------------------
+33. Use Wireshark to identify ARP spoofing attempts
+    ->sudo tshark -i eth0 -Y "arp" -V
+    ->sudo tshark -i eth0 -Y "arp.opcode == 2" -V
+----------------------------------------------------------------------------------------------------------------------------
+34. Install Armitage and connect it to the Metasploit framework.
+     ->sudo apt update
+     ->sudo apt install armitage
+     ->sudo systemctl start postgresql
+     ->sudo msfdb init
+     ->sudo systemctl start metasploit
+     ->sudo Armitage
+---------------------------------------------------------------------------------------------------------------------------
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
 
