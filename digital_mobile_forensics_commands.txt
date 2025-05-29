@@ -108,3 +108,120 @@ SELECT display_name, phone_number FROM contacts;
 - Deleted SMS may be in unallocated space.
 - Can use tsk_recover or carve data.
 - Recovery depends on overwriting and database vacuuming.
+Here's a complete breakdown for the mobile forensics lab task to list all contacts with phone numbers from an Android phone using a SQLite query. This assumes you have access to the contacts database (usually found in /data/data/com.android.providers.contacts/databases/contacts2.db).
+
+
+---
+
+1. Aim and Algorithm
+
+Aim:
+To retrieve and list all contacts stored on an Android device that have associated phone numbers using a SQL query on the contacts2.db SQLite database.
+
+Algorithm:
+
+1. Access the Android device using adb and extract the contacts2.db database.
+
+
+2. Open the contacts2.db file using a SQLite browser or CLI.
+
+
+3. Use a SQL query to join the contacts and data tables to get names and phone numbers.
+
+
+4. Display the resulting contact names and numbers.
+
+
+
+
+---
+
+2. Program and Procedure
+
+Tools Required:
+
+Android Debug Bridge (adb)
+
+SQLite CLI or SQLite Browser
+
+Access to /data/data/com.android.providers.contacts/databases/contacts2.db
+
+
+Steps:
+
+1. Connect the Android device and enable USB debugging.
+
+
+2. Use adb to pull the database:
+
+adb root
+adb pull /data/data/com.android.providers.contacts/databases/contacts2.db
+
+
+3. Open the database using the SQLite CLI:
+
+sqlite3 contacts2.db
+
+
+4. Run the following SQL query to list all contacts with phone numbers:
+
+SELECT 
+    display_name, 
+    data1 AS phone_number 
+FROM 
+    view_data 
+WHERE 
+    mimetype = 'vnd.android.cursor.item/phone_v2';
+
+Alternatively, if view_data is not available:
+
+SELECT 
+    raw_contacts.display_name, 
+    data.data1 AS phone_number 
+FROM 
+    raw_contacts 
+JOIN 
+    data 
+ON 
+    raw_contacts._id = data.raw_contact_id 
+WHERE 
+    data.mimetype = 'vnd.android.cursor.item/phone_v2';
+
+
+
+
+---
+
+3. Execution and Results
+
+Execution:
+
+Open terminal and execute the adb pull command to get contacts2.db.
+
+Launch SQLite CLI and load the database.
+
+Run the SQL query as given above.
+
+
+Results:
+
+The query will return a list of contact names and their associated phone numbers extracted from the contacts database.
+
+
+
+---
+
+4. Output
+
+Example output:
+
+display_name       | phone_number
+-------------------|-------------------
+John Smith         | +1234567890
+Alice Johnson      | +1987654321
+Bob Lee            | 5551234567
+
+
+---
+
+Let me know if you'd like a Python script to automate this process or if you want to extract this from a specific file.
