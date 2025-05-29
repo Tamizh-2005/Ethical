@@ -1,0 +1,21 @@
+adb devices
+adb shell
+su
+cd /data/data/com.android.providers.telephony/databases/
+cp mmssms.db /sdcard/
+adb pull /sdcard/mmssms.db
+______________________________________________
+SELECT
+  _id AS "Message ID",
+  address AS "Phone Number",
+  datetime(date / 1000, 'unixepoch', 'localtime') AS "Date & Time",
+  body AS "Message Body",
+  CASE type
+    WHEN 1 THEN 'Received'
+    WHEN 2 THEN 'Sent'
+    ELSE 'Other'
+  END AS "Message Type"
+FROM sms
+ORDER BY date DESC
+LIMIT 10;
+
