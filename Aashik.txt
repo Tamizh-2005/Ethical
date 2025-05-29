@@ -1,0 +1,142 @@
+VBoxManage modifyvm VM-name --nested-hw-virt on
+_____________________________________________________________
+To install Sleuth Kit (TSK) on Kali Linux, you can follow these steps. Kali Linux repositories often include Sleuth Kit, so installation is usually straightforward.
+
+
+
+
+---
+
+
+✅ Method 1: Install via APT (Recommended)
+
+
+This is the easiest and safest method.
+
+
+1. Update your package list:
+
+
+sudo apt update
+
+
+
+
+2. Install Sleuth Kit:
+
+
+sudo apt install sleuthkit
+
+
+
+
+3. Verify installation:
+
+
+fls -V
+
+
+You should see version information if the tool is installed correctly.
+
+
+
+
+
+
+
+
+---
+
+
+✅ Method 2: Build from Source (Optional - for latest version)
+
+
+If you want the latest version, you can build it from the source:
+
+
+1. Install dependencies:
+
+
+sudo apt update
+sudo apt install build-essential autoconf libtool libafflib-dev libewf-dev zlib1g-dev libsqlite3-dev
+
+
+
+
+2. Download the latest source code: Go to https://github.com/sleuthkit/sleuthkit and download the latest release:
+
+
+git clone https://github.com/sleuthkit/sleuthkit.git
+cd sleuthkit
+
+
+
+
+3. Build and install:
+
+
+./bootstrap
+./configure
+make
+sudo make install
+
+
+
+
+4. Check installation:
+
+
+fls -V
+
+
+
+
+
+
+
+
+---
+
+
+Optional: Install Autopsy (GUI for Sleuth Kit)
+
+
+Autopsy is a GUI frontend for Sleuth Kit:
+
+
+sudo apt install autopsy
+
+
+Then run:
+
+
+autopsy
+
+
+Access it via browser: http://localhost:9999/autopsy
+
+
+
+
+---
+
+
+Let me know if you want help using Sleuth Kit tools like fls, tsk_recover, icat, etc.
+_________________________________________________________________________________________
+
+
+ Common Tools in Sleuth Kit:
+
+
+Tool Purpose
+
+
+fls List files and directories from a disk image
+icat Extract content of a file based on inode
+tsk_recover Recover deleted files from a file system
+mmls Show partition layout of a disk image
+fsstat Display file system details
+istat Show metadata (inode) of a file
+_________________________________________________________________________________________
+sudo dd if=/dev/block/mmcblk0p1 of=block_data.img bs=512 count=1000
+_________________________________________________________________________________________
