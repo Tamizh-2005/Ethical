@@ -139,4 +139,89 @@ fsstat Display file system details
 istat Show metadata (inode) of a file
 _________________________________________________________________________________________
 sudo dd if=/dev/block/mmcblk0p1 of=block_data.img bs=512 count=1000
-_________________________________________________________________________________________
+_________________________________________________________________________________________To run ADB (Android Debug Bridge), follow these steps:
+
+
+---
+
+✅ Step 1: Install Android SDK Platform Tools
+
+Download the official Platform Tools from Google:
+👉 https://developer.android.com/tools/releases/platform-tools
+
+Extract the downloaded ZIP file to a folder (e.g., C:\platform-tools or /home/user/platform-tools on Linux).
+
+
+
+---
+
+✅ Step 2: Enable Developer Options & USB Debugging on Android Device
+
+1. Go to Settings > About Phone
+
+
+2. Tap "Build Number" 7 times to enable Developer Options
+
+
+3. Go to Settings > Developer Options
+
+
+4. Turn on USB Debugging
+
+
+
+
+---
+
+✅ Step 3: Connect Android Device to PC
+
+Use a USB cable to connect your phone to your computer.
+
+On the phone, you may see a prompt: "Allow USB debugging?" → Tap Allow
+
+
+
+---
+
+✅ Step 4: Open Command Prompt or Terminal
+
+1. Navigate to the folder where you extracted Platform Tools:
+
+cd path/to/platform-tools
+
+
+2. Check if the device is connected:
+
+adb devices
+
+Output:
+
+List of devices attached
+ZY2234G9XY    device
+
+
+
+
+---
+
+✅ Step 5: Run ADB Commands
+
+Now you can run any ADB command. Examples:
+
+Open shell on device:
+
+adb shell
+
+Install an APK:
+
+adb install appname.apk
+
+Pull a file from the device:
+
+adb pull /sdcard/DCIM/photo.jpg
+
+
+
+---
+
+Let me know if you’re using Windows, Linux, or macOS — I can tailor the steps or help with setting up paths/environment variables.
