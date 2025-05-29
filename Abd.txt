@@ -2,7 +2,7 @@ adb devices
 adb shell
 su
 cd /data/data/com.android.providers.telephony/databases/
-cp mmssms.db /sdcard/
+cp mmssms.db /sdcard/ C:\Forensics\SMSBackup
 adb pull /sdcard/mmssms.db
 ______________________________________________
 SELECT
