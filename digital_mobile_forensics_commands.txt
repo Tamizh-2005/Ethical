@@ -1,0 +1,110 @@
+
+1. Install Sleuth Kit on a Linux system
+sudo apt update
+sudo apt install sleuthkit
+tsk_version   # Verify installation
+
+2. Extract data from allocated blocks
+fls -o <offset> <disk_image> > allocated_blocks.txt
+
+3. Extract data from unallocated blocks
+blkls <disk_image> > unallocated_blocks.dd
+
+4. Identify and extract a SQLite database
+icat <disk_image> <inode_number> > database.sqlite
+
+5. Locate and extract call log database
+fls -r <disk_image> | grep -i 'calllog' 
+icat <disk_image> <inode_number> > calllog.db
+
+6. Query call log database
+sqlite3 calllog.db
+SELECT number, date, duration FROM calls;
+
+7. Locate and extract SMS database
+fls -r <disk_image> | grep -i 'mmssms.db'
+icat <disk_image> <inode_number> > mmssms.db
+
+8. Query SMS database
+sqlite3 mmssms.db
+SELECT address, date, body FROM sms WHERE address = '<phone_number>';
+
+9. Locate and extract contacts database
+fls -r <disk_image> | grep -i 'contacts'
+icat <disk_image> <inode_number> > contacts.db
+
+10. Query contacts database
+sqlite3 contacts.db
+SELECT display_name, phone_number FROM contacts;
+
+11. Install MVT (Mobile Verification Toolkit)
+pip install mvt
+
+12. Connect Android using adb and list packages
+adb devices
+adb shell pm list packages
+
+13. Extract bug report
+adb bugreport > bugreport.zip
+
+14. Collect system logs
+adb logcat > system_logs.txt
+
+15. Extract APK file of an installed app
+adb shell pm path <package_name>
+adb pull <apk_path>
+
+16. Generate bodyfile timeline using Sleuth Kit
+fls -m / -r <disk_image> | mactime -d -b - > timeline.csv
+
+17. Merge timestamps with Sleuth Kit timeline
+# Export timestamps from databases and combine with timeline.csv manually.
+
+18. Enable USB debugging
+# On Android: Go to Settings > Developer options > Enable USB debugging
+
+19. List installed packages
+adb shell pm list packages
+
+20. Pull APK file
+adb shell pm path <package_name>
+adb pull <path_to_apk>
+
+21. Extract system logs using logcat
+adb logcat > logs.txt
+
+22. Generate bug report
+adb bugreport > bugreport.zip
+
+23. Extract device properties
+adb shell getprop > device_properties.txt
+
+24. Locate call logs in forensic image
+fls -r <image> | grep -i 'calllog'
+
+25. Extract call logs using Sleuth Kit
+icat <image> <inode_number> > calllog.db
+
+26. Write query to list missed calls
+sqlite3 calllog.db
+SELECT number, date FROM calls WHERE type=3;
+
+27. Extract SMS database
+icat <disk_image> <inode_number> > mmssms.db
+
+28. Query SMS within a date range
+sqlite3 mmssms.db
+SELECT address, body, date FROM sms WHERE date BETWEEN <start> AND <end>;
+
+29. Locate contacts database
+fls -r <image> | grep -i 'contacts'
+icat <image> <inode_number> > contacts.db
+
+30. Query contacts list
+sqlite3 contacts.db
+SELECT display_name, phone_number FROM contacts;
+
+31. Challenges in extracting deleted SMS
+- Deleted SMS may be in unallocated space.
+- Can use tsk_recover or carve data.
+- Recovery depends on overwriting and database vacuuming.
