@@ -673,3 +673,126 @@ If you want a more vulnerable target for testing, try using Metasploitable2 as t
 ---
 
 Would you like a script to automate this attack in Kali or want help analyzing Hydra logs?nt help analyzing Hydra logs?
+To use Fail2ban to scan log files and ban IP addresses showing malicious signs (e.g., repeated failed login attempts), follow these steps:
+
+
+---
+
+✅ Step-by-Step Setup of Fail2ban
+
+1. Install Fail2ban
+
+On Debian/Ubuntu:
+
+sudo apt update
+sudo apt install fail2ban
+
+On CentOS/RHEL:
+
+sudo yum install epel-release
+sudo yum install fail2ban
+
+
+---
+
+2. Create/Copy the Configuration File
+
+Never modify jail.conf directly. Instead, create a copy:
+
+sudo cp /etc/fail2ban/jail.conf /etc/fail2ban/jail.local
+
+
+---
+
+3. Configure the Jail Settings
+
+Edit the jail config:
+
+sudo nano /etc/fail2ban/jail.local
+
+Look for [sshd] (or the relevant service) and enable it:
+
+[sshd]
+enabled = true
+port    = ssh
+filter  = sshd
+logpath = /var/log/auth.log  ; On Debian/Ubuntu
+         # /var/log/secure   ; On CentOS/RHEL
+maxretry = 5
+bantime = 3600
+findtime = 600
+
+> This will ban an IP for 1 hour (bantime = 3600) if it fails login 5 times within 10 minutes.
+
+
+
+
+---
+
+4. Restart and Enable Fail2ban
+
+sudo systemctl restart fail2ban
+sudo systemctl enable fail2ban
+
+
+---
+
+5. Monitor Fail2ban
+
+Check the jail status:
+
+sudo fail2ban-client status
+sudo fail2ban-client status sshd
+
+View banned IPs:
+
+sudo iptables -L
+
+Unban an IP:
+
+sudo fail2ban-client set sshd unbanip <IP_ADDRESS>
+
+
+---
+
+✅ Optional: Create a Custom Jail for Any Log File
+
+If you want to scan a custom log file (e.g., /var/log/myapp.log):
+
+Step 1: Create a Filter
+
+Create a file like:
+
+sudo nano /etc/fail2ban/filter.d/myapp.conf
+
+Example regex to match failed login:
+
+[Definition]
+failregex = Failed login attempt from <HOST>
+ignoreregex =
+
+Step 2: Add Jail Entry
+
+In jail.local:
+
+[myapp]
+enabled = true
+filter = myapp
+logpath = /var/log/myapp.log
+maxretry = 3
+bantime = 1800
+findtime = 300
+
+
+---
+
+✅ Summary
+
+Fail2ban works by:
+
+Scanning logs for patterns (using filters).
+
+Banning IPs via firewall rules if malicious behavior is detected (e.g., brute-force attacks).
+
+
+Let me know if you want a custom filter example or to apply it to services like Apache, Nginx, vsftpd, etc.
