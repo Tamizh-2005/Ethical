@@ -20,3 +20,136 @@ ORDER BY date DESC
 LIMIT 10;
 ____________________________________
 hydra -L user.txt -p msfadmin -V -t4 -f -u ssh://192.168.1
+____________________________________To perform real-time network traffic analysis and data packet logging using Snort, follow these structured sections:
+
+
+---
+
+🔍 Aim:
+
+To analyze real-time network traffic and log packets using Snort, an open-source Network Intrusion Detection System (NIDS), for monitoring suspicious activities in a network environment.
+
+
+---
+
+🧠 Algorithm:
+
+1. Install Snort on your system.
+
+
+2. Configure Snort with necessary rules and interfaces.
+
+
+3. Start Snort in packet logging mode to capture real-time traffic.
+
+
+4. Analyze log files to review packet-level data.
+
+
+5. Refine rules based on traffic behavior.
+
+
+6. Repeat analysis for continuous monitoring and detection.
+
+
+
+
+---
+
+🛠️ Procedure:
+
+Step 1: Installation
+
+sudo apt update
+sudo apt install snort
+
+During installation, specify the home network IP range.
+
+
+Step 2: Verify Installation
+
+snort -V
+
+Step 3: Configuration
+
+Configuration files are usually in /etc/snort/.
+
+Open and edit the snort.conf file to define:
+
+var HOME_NET 192.168.1.0/24
+var EXTERNAL_NET any
+
+
+Step 4: Create Log Directory
+
+sudo mkdir /var/log/snort
+sudo chmod 777 /var/log/snort
+
+Step 5: Run Snort in Packet Logging Mode
+
+sudo snort -dev -i eth0 -l /var/log/snort -A console
+
+-d: Dump the application layer data.
+
+-e: Show link layer headers.
+
+-v: Verbose mode.
+
+-i eth0: Interface to listen on (change if needed).
+
+-l: Directory to save logs.
+
+
+Step 6: Observe and Analyze Logs
+
+Logs will be stored in /var/log/snort/
+
+Use tools like tcpdump, wireshark, or read Snort logs directly.
+
+
+Step 7: Add Custom Rules (Optional)
+
+Edit local.rules to add detection rules, e.g.:
+
+alert tcp any any -> 192.168.1.0/24 80 (msg:"HTTP Access Detected"; sid:1000001;)
+
+Reload Snort with:
+
+sudo snort -A console -q -c /etc/snort/snort.conf -i eth0
+
+
+---
+
+💻 Execution (Example Command):
+
+sudo snort -dev -i eth0 -l /var/log/snort -A console
+
+Sample Output:
+
+05/30-14:12:50.191234 192.168.1.2:3456 -> 93.184.216.34:80
+TCP TTL:64 TOS:0x0 ID:1111 IpLen:20 DgmLen:52
+***A**** Seq: 0x1  Ack: 0x2  Win: 0x3  TcpLen: 32
+
+
+---
+
+📦 Output:
+
+Packets are logged in /var/log/snort/.
+
+Console shows live traffic alerts and packet summaries.
+
+Logged files (e.g., snort.log.*) contain binary packet dumps for analysis.
+
+
+
+---
+
+📊 Result:
+
+Snort successfully captured real-time network traffic and logged the data packets for later analysis. The logs can now be inspected to detect any malicious patterns or rule violations, helping in proactive network defense.
+
+
+---
+
+Let me know if you want a sample custom rule, Wireshark-compatible log, or steps for running Snort in IDS mode.
